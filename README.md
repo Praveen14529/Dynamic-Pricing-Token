@@ -1,4 +1,4 @@
-# Project Name
+# Dynamic Pricing Token
 
 ## Overview
 This is a decentralized application (DApp) that runs on the Edu chain. It is designed to [briefly describe the main function of your project]. The purpose of this project is to [state the goal or use case], utilizing the power of blockchain for [specific feature or benefit].
