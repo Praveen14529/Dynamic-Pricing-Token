@@ -1,18 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Token Sale</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Pricing Token</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .slider {
+            width: 100%;
+            margin: 15px 0;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .output {
+            margin: 15px 0;
+            font-size: 1.1em;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome to the Dynamic Token Sale</h1>
-    <p>Current Token Price: <span id="currentPrice">$0.00</span></p>
-    <button id="buyTokens">Buy Tokens</button>
-    <p id="message"></p>
-  </div>
-  <script src="script.js"></script>
+    <div class="container">
+        <h1>Dynamic Pricing Token</h1>
+        <div class="output">
+            <p>Current Token Price: <span id="tokenPrice">$1.00</span></p>
+            <p>Current Demand: <span id="demand">50</span></p>
+        </div>
+        <input type="range" id="demandSlider" class="slider" min="0" max="100" value="50">
+        <div class="buttons">
+            <button onclick="buyTokens(1)">Buy 1 Token</button>
+            <button onclick="buyTokens(5)">Buy 5 Tokens</button>
+            <button onclick="buyTokens(10)">Buy 10 Tokens</button>
+        </div>
+        <p>Your Tokens: <span id="userTokens">0</span></p>
+    </div>
+
+    <script>
+        let tokenPrice = 1.0; // Initial price
+        let demand = 50; // Initial demand
+        let userTokens = 0; // User's tokens
+
+        const tokenPriceElement = document.getElementById('tokenPrice');
+        const demandElement = document.getElementById('demand');
+        const userTokensElement = document.getElementById('userTokens');
+        const demandSlider = document.getElementById('demandSlider');
+
+        // Update token price based on demand
+        const updatePrice = () => {
+            const basePrice = 1.0;
+            const demandFactor = demand / 50; // Scale demand (0-2)
+            tokenPrice = (basePrice * demandFactor).toFixed(2);
+            tokenPriceElement.textContent = `$${tokenPrice}`;
+        };
+
+        // Handle demand slider changes
+        demandSlider.addEventListener('input', (event) => {
+            demand = event.target.value;
+            demandElement.textContent = demand;
+            updatePrice();
+        });
+
+        // Handle token purchase
+        const buyTokens = (quantity) => {
+            const cost = (tokenPrice * quantity).toFixed(2);
+            alert(`You bought ${quantity} tokens for $${cost}`);
+            userTokens += quantity;
+            userTokensElement.textContent = userTokens;
+            demand = Math.min(100, parseInt(demand) + quantity / 10); // Increase demand
+            demandSlider.value = demand;
+            demandElement.textContent = demand;
+            updatePrice();
+        };
+
+        // Initialize price
+        updatePrice();
+    </script>
 </body>
 </html>
